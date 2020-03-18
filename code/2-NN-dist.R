@@ -16,3 +16,6 @@ dist <- edge_dist(DT = DT, id = 'IDYr', coords = c('EASTING', 'NORTHING'),
                    timegroup = 'timegroup', threshold = 500000, returnDist = TRUE, 
                    fillNA = FALSE,
                    splitBy = c("Year"))
+
+
+dist[, mean(distance), by = c("Year", "ID1")]
