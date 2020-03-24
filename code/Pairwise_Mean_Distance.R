@@ -17,12 +17,20 @@ lapply(libs, require, character.only = TRUE)
 
 ### Input data ----
 carlocs <- fread("input/caribou data 2009.csv")
-Mrlocsall <- fread("~/Dropbox/Vander Wal Lab/Ch2data/MRCaribouFemales.csv")
-Mrlocsall$Year <- substr(Mrlocs$FIX_DATE, 1,4)
-Mrlocsall$MonthDay <- substr(Mrlocs$FIX_DATE, 6,10)
+Mrlocs <- fread("~/Dropbox/Vander Wal Lab/Ch2data/MRCaribouFemales.csv")
 
-sublocs <- Mrlocsall[Mrlocsall$MonthDay >= "05-20" & Mrlocsall$MonthDay <= "07-15",]
-Mrlocs <- setDT(sublocs)[,. (ANIMAL_ID, FIX_DATE, FIX_TIME, EASTING, NORTHING, X_COORD, Y_COORD, Year)]
+
+aa <- Mrlocs[, mean(meanDistance), by = c("ANIMAL_ID", "Year")]
+
+ggplot(aa[V1 < 20000]) +
+  geom_histogram(aes(V1)) +
+  facet_wrap(~Year)
+
+#Mrlocsall$Year <- substr(Mrlocs$FIX_DATE, 1,4)
+#Mrlocsall$MonthDay <- substr(Mrlocs$FIX_DATE, 6,10)
+
+#sublocs <- Mrlocsall[Mrlocsall$MonthDay >= "05-20" & Mrlocsall$MonthDay <= "07-15",]
+Mrlocs <- Mrlocs[,. (ANIMAL_ID, FIX_DATE, FIX_TIME, EASTING, NORTHING, X_COORD, Y_COORD, Year)]
 
 ### Set variables ----
 date.col <- "FIX_DATE"
@@ -82,6 +90,8 @@ MeanPairwiseDists <- function(in.dt) {
        id = names)
   return(dst.mtrx)
 }
+
+edge_nn()
 
 # Apply spDists [sp] by time step
 MeanDistsSp <- function(in.dt) {
