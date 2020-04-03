@@ -21,4 +21,4 @@ switch <- avg_season[, c("ID", "switch", "Year")]
 
 switch <- switch[!is.na(switch)]
 
-
+switch[, .N, by = "switch"]
