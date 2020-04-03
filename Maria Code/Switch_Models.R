@@ -7,8 +7,7 @@ library(Matrix)
 library(MuMIn)
 library(piecewiseSEM)
 
-avg_season <- read_csv("~/Dropbox/Vander Wal Lab/Maria_Honours/Code/avg_season_NNdist.csv")
-View(avg_season)
+avg_season <- fread("data/avg_season_NNdist.csv")
 
 
 avg_season$Year<-factor(avg_season$Year, labels=c("2009","2010","2011","2012","2013"))
