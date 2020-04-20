@@ -40,6 +40,9 @@ utmNL <- st_transform(nl, utm)
 #st_write(utmNL, 'output/newfoundland-polygons.gpkg')
 
 
+nl <- st_read('output/newfoundland-polygons.gpkg')
+
+
 ### Theme ----
 # Colors
 source('code/00-palette.R')
