@@ -9,12 +9,10 @@ lapply(libs, require, character.only = TRUE)
 obs <- readRDS("data/group-size-spatial.RDS")
 
 ### Theme ----
-# Colors
-source('code/00-palette.R')
 
 # Theme
 themeMap <- theme(panel.border = element_rect(size = 1, fill = NA),
-                  panel.background = element_rect(fill = watercol),
+                  panel.background = element_rect(fill = "#d0c2a9"),
                   panel.grid = element_line(color = 'black', size = 0.2),
                   axis.text = element_text(size = 11, color = 'black'),
                   axis.title = element_blank())
