@@ -8,6 +8,10 @@ lapply(libs, require, character.only = TRUE)
 ## Load group size data
 obs <- readRDS("data/group-size-spatial.RDS")
 
+## Load collar data
+DT <- readRDS("output/1-caribou-all.RDS")
+DT <- DT[Year == "2012"]
+
 ### Theme ----
 
 # Theme
