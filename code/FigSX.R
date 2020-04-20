@@ -1,7 +1,7 @@
 
 
 ### Packages ----
-libs <- c('sf', 'dadta.table',
+libs <- c('sf', 'data.table',
           'osmdata', 'ggplot2')
 lapply(libs, require, character.only = TRUE)
 
@@ -37,7 +37,7 @@ utm <- st_crs('+proj=utm +zone=21 ellps=WGS84')
 utmNL <- st_transform(nl, utm)
 
 ### Output ----
-#st_write(utmNL, 'output/newfoundland-polygons.gpkg')
+st_write(utmNL, 'output/newfoundland-polygons.gpkg')
 
 
 nl <- st_read('output/newfoundland-polygons.gpkg')
@@ -55,11 +55,18 @@ themeMap <- theme(panel.border = element_rect(size = 1, fill = NA),
                   axis.title = element_blank())
 
 ### Plot ----
-# NOTE: this figure only has the main island's coastline (eg missing Fogo)
-# Base NL
 (gnl <- ggplot(nl) +
    geom_sf(fill = islandcol, color = coastcol, size = 0.3) +
    themeMap)
+### Output ----
+ggsave(
+  'graphics/FigS6-map.png',
+  gnl,
+  width = 7,
+  height = 7,
+  dpi = 320
+)
+
 
 ggplot(obs) +
   geom_point(aes(longitude, latitude, size = group.size), alpha = 0.25)
