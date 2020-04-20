@@ -6,42 +6,7 @@ libs <- c('sf', 'data.table',
 lapply(libs, require, character.only = TRUE)
 
 ## Load group size data
-obs <- fread("data/group-size-spatial.csv")
-
-
-### Download OSM data ----
-# Set up bounding box - order: xmin, ymin, xmax, ymax
-bb <- c(xmin = min(obs$longitude),
-        ymin = min(obs$latitude),
-        xmax = max(obs$longitude),
-        ymax = max(obs$latitude))
-
-## Middle Ridge Area
-zz <- opq(bb) %>%
-  add_osm_feature(key = 'place', value = 'island') %>%
-  osmdata_sf()
-
-lns <- zz$osm_lines
-
-# Union -> polygonize -> cast lines = geometry set
-castpolys <- st_cast(st_polygonize(st_union(lns)))
-
-# Combine geometries and cast as sf
-nl <- st_as_sf(castpolys)
-
-### Reproject islands ----
-# Projections
-utm <- st_crs('+proj=utm +zone=21 ellps=WGS84')
-
-# Project to UTM
-utmNL <- st_transform(nl, utm)
-
-### Output ----
-st_write(utmNL, 'output/newfoundland-polygons.gpkg')
-
-
-nl <- st_read('output/newfoundland-polygons.gpkg')
-
+obs <- readRDS("data/group-size-spatial.RDS")
 
 ### Theme ----
 # Colors
@@ -55,9 +20,11 @@ themeMap <- theme(panel.border = element_rect(size = 1, fill = NA),
                   axis.title = element_blank())
 
 ### Plot ----
-(gnl <- ggplot(nl) +
-   geom_sf(fill = islandcol, color = coastcol, size = 0.3) +
-   themeMap)
+
+ggplot(obs) +
+   geom_sf(aes(size = group.size), alpha = 0.25) +
+   themeMap
+
 ### Output ----
 ggsave(
   'graphics/FigS6-map.png',
