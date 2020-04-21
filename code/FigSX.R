@@ -1,7 +1,7 @@
 
 
 ### Packages ----
-libs <- c('data.table',
+libs <- c('data.table', 'sf',
           'gridExtra', 'ggplot2',
           'sp', 'adehabitatHR')
 lapply(libs, require, character.only = TRUE)
@@ -20,8 +20,6 @@ DTSP <- st_as_sf(DT, coords = c("X_COORD", "Y_COORD"),
 
 ## Generate home range for animals on the calving ground
 utm21N <- '+proj=utm +zone=21 ellps=WGS84'
-
-source("functions/GetHRBy.R")
 
 coords <- c('X_COORD', 'Y_COORD')
 
@@ -46,7 +44,7 @@ themeMap <- theme(legend.key = element_blank(),
                   axis.title = element_blank())
 
 ### Plot ----
-png("graphics/FigS6.1.png", 
+png("graphics/FigS6.png", 
     width = 5000, height = 2500, units = "px", res = 600)
 aa <- ggplot(obs) +
    geom_sf(aes(size = group.size), alpha = 0.25) +
@@ -68,16 +66,4 @@ bb <- ggplot(DTSP) +
 grid.arrange(aa,bb, ncol = 2)
 dev.off()
 
-png("graphics/FigS6.2.png", 
-    width = 2500, height = 2500, units = "px", res = 600)
-ggplot(obs) +
-  geom_sf(aes(size = group.size), alpha = 0.25) +
-  geom_polygon(data = df, aes(x = long, y = lat), 
-                color = "black", 
-                fill = "dodgerblue",
-                alpha = 0.15) +
-  ylim(47.5, 48.7) +
-  xlim(-55.7, -54.5) +
-  scale_size_continuous(breaks=c(1, 10, 50, 100)) +
-  themeMap
-dev.off()
+
