@@ -3,7 +3,7 @@
 ### Packages ----
 libs <- c('data.table', 'sf',
           'gridExtra', 'ggplot2',
-          'sp', 'adehabitatHR')
+          'sp', 'adehabitatHR', 'dismo')
 lapply(libs, require, character.only = TRUE)
 
 ## Load group size data
@@ -33,37 +33,67 @@ vertices <- getverticeshr(ud, 99.5)
 df <- data.table(fortify(vertices))
 df <- df[id == "On"]
 
+### generate voronoi polygons 
+# for the voronoi polygons
+raw_all_NNdist <- fread("data/raw_all_NNdist.csv")
+MR2012 <- raw_all_NNdist[Year == "2012"]
+
+MR2012_sp <- SpatialPointsDataFrame(MR2012[, .(X_COORD,Y_COORD)], 
+                                    data=data.frame(id=MR2012$ANIMAL_ID),
+                                    proj4string = CRS("+proj=utm +zone=21 ellps=WGS84")) #create SPDF
+## Get centroid data
+MR2012[, c('centX2', 'centY2') := .(mean(X_COORD),  mean(Y_COORD)), by = ANIMAL_ID]
+
+### make the voronoi polygons
+SpatialPointsDataFrame(unique(MR2012[, .(centX2, centY2, ANIMAL_ID)])[, .(centX2, centY2)],
+                       data=unique(MR2012[, .(centX2, centY2, ANIMAL_ID)])[, .(ANIMAL_ID)])
+
+
+#list by year
+ls.MR <- list(MR2012)
+
+#function to create voronoi polygons
+ls.voronoi <- lapply(1:length(ls.MR),FUN = function(dt){
+   # ls.MR[[dt]]
+   d <- unique(ls.MR[[dt]][,.(centX2, centY2, ANIMAL_ID)])
+   s <- SpatialPointsDataFrame(d[,.(centX2, centY2)], data = d[,.(ANIMAL_ID)])
+   voronoi(s)
+}) 
 
 ### Theme ----
 # Theme
 themeMap <- theme(legend.key = element_blank(),
                   panel.border = element_rect(size = 1, fill = NA),
-                  panel.background = element_rect(fill = "#d0c2a9"),
-                  panel.grid = element_line(color = 'black', size = 0.2),
+                  panel.background = element_rect(fill = "#d0c2a9"), 
+                  panel.grid = element_line(color = 'black', size = 0.1),
                   axis.text = element_text(size = 11, color = 'black'),
                   axis.title = element_blank())
 
 ### Plot ----
-png("graphics/FigS6.png", 
-    width = 5000, height = 2500, units = "px", res = 600)
-aa <- ggplot(obs) +
+#png("graphics/FigS6.png", 
+#    width = 5000, height = 2500, units = "px", res = 600)
+ggplot(obs) +
    geom_sf(aes(size = group.size), alpha = 0.25) +
    #geom_polygon(data = df, aes(x = long, y = lat), 
-  #              color = "black", 
+   #              color = "black", 
   #              fill = "dodgerblue",
   #              alpha = 0.15) +
-   ylim(47.5, 48.7) +
-   xlim(-55.7, -54.5) +
+   geom_polygon(data = fortify(ls.voronoi[[1]]), 
+                aes(long,lat, group = group, fill = group), 
+                colour = "black", 
+                size = 0.5) +
+   geom_point(data = MR2012, aes(centX2, centY2, color = CalvingGround), 
+               size = 1.5, alpha = 0.01) +
+   ylim(47.75, 48.6) +
+   xlim(-55.6, -54.6) +
    scale_size_continuous(breaks=c(1, 10, 50, 100)) +
    themeMap
 
-bb <- ggplot(DTSP) +
-   geom_sf(aes(color = CalvingGround), alpha = 0.25) +
-   ylim(47.5, 48.7) +
-   xlim(-55.7, -54.5) +
-   themeMap
-
-grid.arrange(aa,bb, ncol = 2)
-dev.off()
+#dev.off()
 
 
+#bb <- ggplot(DTSP) +
+#   geom_sf(aes(color = CalvingGround), alpha = 0.25) +
+#   ylim(47.5, 48.7) +
+#   xlim(-55.7, -54.5) +
+#  themeMap
