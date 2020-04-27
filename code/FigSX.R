@@ -44,6 +44,10 @@ MR2012_sp <- SpatialPointsDataFrame(MR2012[, .(X_COORD,Y_COORD)],
 ## Get centroid data
 MR2012[, c('centX2', 'centY2') := .(mean(X_COORD),  mean(Y_COORD)), by = ANIMAL_ID]
 
+MR2012mean <- MR2012[, .(mean(X_COORD),  mean(Y_COORD)), by = c("ANIMAL_ID", "CalvingGround")]
+colnames(MR2012mean) <- c("ANIMAL_ID", "CalvingGround" ,"centX2", "centY2")
+
+
 ### make the voronoi polygons
 SpatialPointsDataFrame(unique(MR2012[, .(centX2, centY2, ANIMAL_ID)])[, .(centX2, centY2)],
                        data=unique(MR2012[, .(centX2, centY2, ANIMAL_ID)])[, .(ANIMAL_ID)])
@@ -55,8 +59,8 @@ ls.MR <- list(MR2012)
 #function to create voronoi polygons
 ls.voronoi <- lapply(1:length(ls.MR),FUN = function(dt){
    # ls.MR[[dt]]
-   d <- unique(ls.MR[[dt]][,.(centX2, centY2, ANIMAL_ID)])
-   s <- SpatialPointsDataFrame(d[,.(centX2, centY2)], data = d[,.(ANIMAL_ID)])
+   d <- unique(ls.MR[[dt]][,.(centX2, centY2, ANIMAL_ID, CalvingGround)])
+   s <- SpatialPointsDataFrame(d[,.(centX2, centY2)], data = d[,.(ANIMAL_ID, CalvingGround)])
    voronoi(s)
 }) 
 
@@ -70,10 +74,10 @@ themeMap <- theme(legend.key = element_blank(),
                   axis.title = element_blank())
 
 ### Plot ----
-#png("graphics/FigS6.png", 
-#    width = 5000, height = 2500, units = "px", res = 600)
-ggplot(obs) +
-   geom_sf(aes(size = group.size), alpha = 0.25) +
+png("graphics/FigS6.png", 
+    width = 4000, height = 4000, units = "px", res = 600)
+ggplot() +
+   geom_sf(data = obs, aes(size = group.size), alpha = 0.25) +
    #geom_polygon(data = df, aes(x = long, y = lat), 
    #              color = "black", 
   #              fill = "dodgerblue",
@@ -81,15 +85,15 @@ ggplot(obs) +
    geom_polygon(data = fortify(ls.voronoi[[1]]), 
                 aes(long,lat, group = group), 
                 colour = "black", fill = NA,
-                size = 0.5) +
-   geom_point(data = MR2012, aes(centX2, centY2, color = CalvingGround), 
-               size = 1.5, alpha = 0.01) +
-   #ylim(47.75, 48.6) +
-   #xlim(-55.5, -54.6) +
+                size = 0.5, alpha = 0.25) +
+   geom_point(data = MR2012mean, aes(centX2, centY2, color = CalvingGround),
+               size = 2, alpha = 0.75) +
+   ylim(47.75, 48.6) +
+   xlim(-55.5, -54.6) +
    scale_size_continuous(breaks=c(1, 10, 50, 100)) +
    themeMap
 
-#dev.off()
+dev.off()
 
 
 #bb <- ggplot(DTSP) +
