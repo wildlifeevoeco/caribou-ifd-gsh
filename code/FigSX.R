@@ -79,13 +79,13 @@ ggplot(obs) +
   #              fill = "dodgerblue",
   #              alpha = 0.15) +
    geom_polygon(data = fortify(ls.voronoi[[1]]), 
-                aes(long,lat, group = group, fill = group), 
-                colour = "black", 
+                aes(long,lat, group = group), 
+                colour = "black", fill = NA,
                 size = 0.5) +
    geom_point(data = MR2012, aes(centX2, centY2, color = CalvingGround), 
                size = 1.5, alpha = 0.01) +
-   ylim(47.75, 48.6) +
-   xlim(-55.6, -54.6) +
+   #ylim(47.75, 48.6) +
+   #xlim(-55.5, -54.6) +
    scale_size_continuous(breaks=c(1, 10, 50, 100)) +
    themeMap
 
