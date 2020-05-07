@@ -29,13 +29,6 @@ datanew<-transform(avg_season,
 modrank<-rpt(year.rank~Year + (1|ID), data = datanew, grname = c("ID"))
 summary(modrank)
 
-
-## repeatability in calving ground (on/off)
-## don't include year as fixed effect
-modon.off<-rpt(CalvingGround2 ~ (1|ID), data = avg_season, datatype = "Binary", 
-               grname = c("ID"))
-summary(modon.off)
-
 ##repeatability in core/periphery 
 avg_season$CoreThresh<- with(avg_season, NNdistkm - 17.5512)
 avg_season$Core <- as.numeric(ifelse(avg_season$CoreThresh > 0, 0, 1))
