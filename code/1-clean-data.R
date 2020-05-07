@@ -1,11 +1,5 @@
 
 
-
-### All Locs - DTing ====
-# Authors: Quinn Webber, ..., Eric Vander Wal
-# Inputs: Collar data
-# Outputs: Prepped data
-
 ### Packages ----
 libs <- c('data.table', 'ggplot2', 'rgdal', 'lubridate')
 lapply(libs, require, character.only = TRUE)
