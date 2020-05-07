@@ -29,17 +29,12 @@ datanew<-transform(avg_season,
 modrank<-rpt(year.rank~Year + (1|ID), data = datanew, grname = c("ID"))
 summary(modrank)
 
-##repeatability in core/periphery 
-avg_season$CoreThresh<- with(avg_season, NNdistkm - 17.5512)
-avg_season$Core <- as.numeric(ifelse(avg_season$CoreThresh > 0, 0, 1))
-avg_season$Periph<- as.integer(ifelse(avg_season$CoreThresh < 0, 0, 1))
-modcore <- rpt(factor(Core) ~ 1 + (1|ID), data = avg_season[CalvingGround == "On"],
-             datatype = "Binary",
-             grname = c("ID"))
-summary(modcore)
-plot(modcore)
 
-a1 <- lme4::glmer(Core ~ 1 + (1|ID), 
-      family = "binomial", 
-      data = avg_season[CalvingGround == "On"])
-summary(a1)
+### repeatability in NN distance (intra-annual) -- Results in Table S3
+rep <- fread("data/monthly-rep.csv")
+rep$month <- as.factor(rep$month)
+rep$avgNN <- rep$V1/1000
+
+month_rep <-  rpt(avgNN ~ Year*month + (1|ANIMAL_ID), 
+                  data = rep, grname = c("ANIMAL_ID"))
+summary(month_rep)
