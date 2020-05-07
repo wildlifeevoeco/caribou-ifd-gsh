@@ -1,15 +1,14 @@
 
 
+### Packages ----
+libs <- c('data.table', 'ggplot2', 'rptR')
+lapply(libs, require, character.only = TRUE)
 
-library(data.table)
-library(ggplot2)
-library(rptR)
 
-
+## Load data
 avg_season <- fread("data/avg_season_NNdist.csv")
 avg_season$Year <- as.factor(avg_season$Year) 
 avg_season$ID <- as.factor(avg_season$ID) 
-
 
 avg_season$CalvingGround2[avg_season$CalvingGround == "On"] <- 0
 avg_season$CalvingGround2[avg_season$CalvingGround == "Off"] <- 1
@@ -20,7 +19,6 @@ avg_season$CalvingGround2 <- as.integer(avg_season$CalvingGround2)
 mod1<-rpt(NNdistkm ~ Year + (1|ID), data = avg_season, grname = c("ID"))
 summary(mod1)
 plot(mod1)
-
 
 datanew<-transform(avg_season, 
                    year.rank = ave(NNdistkm, Year, 
