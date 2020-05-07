@@ -7,10 +7,10 @@ libs <- c('data.table', 'sf',
 lapply(libs, require, character.only = TRUE)
 
 ## Load group size data
-obs <- readRDS("data/group size/group-size-spatial.RDS")
+obs <- readRDS("data/locs/group-size-spatial.RDS")
 
 ## Load collar data
-DT <- fread("data/figures/Fig2/raw_all_NNdist.csv")
+DT <- fread("data/locs/raw_all_NNdist.csv")
 DT <- DT[Year == "2012"]
 
 DT[, .N, by = "CalvingGround"]
