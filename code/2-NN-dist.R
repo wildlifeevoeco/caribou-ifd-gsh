@@ -6,7 +6,7 @@ lapply(libs, require, character.only = TRUE)
 
 
 ## load data
-DT <- readRDS("output/1-caribou-all.RDS")
+DT <- readRDS("output/locs/caribou-all.RDS")
 
 ## calculate group_times
 DT <- group_times(DT, datetime = 'datetime', threshold = '5 minutes')
