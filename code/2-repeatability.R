@@ -1,5 +1,3 @@
-
-
 ### Packages ----
 libs <- c('data.table', 'ggplot2', 'rptR')
 lapply(libs, require, character.only = TRUE)
