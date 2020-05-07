@@ -16,7 +16,7 @@ avg <- NN[, median(NNdistkm), by = "Year"]
 NN$Lost[NN$Lost == 0] <- "Survived"
 NN$Lost[NN$Lost == 1] <- "Died"
 
-png("graphics/Fig_NN_by_Date.png", width = 6000, height = 4000,
+png("graphics/FigS3.png", width = 6000, height = 4000,
     units = "px", res = 600)
 ggplot(NN) +
   geom_jitter(aes(JDate, NNdistkm, color = factor(Lost))) +
