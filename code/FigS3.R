@@ -4,7 +4,7 @@ libs <- c('data.table', 'ggplot2', 'lubridate')
 lapply(libs, require, character.only = TRUE)
 
 ## Load data
-NN <- fread("data/avg_season_NNdist.csv")
+NN <- fread("data/figures/FigS3/avg_season_NNdist.csv")
 
 NN[, CalvingDate := as.IDate(CalvingDate)]
 NN[, JDate := yday(CalvingDate)]

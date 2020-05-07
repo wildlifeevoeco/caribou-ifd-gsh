@@ -6,7 +6,7 @@ lapply(libs, require, character.only = TRUE)
 
 
 ## Load data
-avg_season <- fread("data/avg_season_NNdist.csv")
+avg_season <- fread("data/analysis/avg_season_NNdist.csv")
 avg_season$Year <- as.factor(avg_season$Year) 
 avg_season$ID <- as.factor(avg_season$ID) 
 
@@ -31,7 +31,7 @@ summary(modrank)
 
 
 ### repeatability in NN distance (intra-annual) -- Results in Table S3
-rep <- fread("data/monthly-rep.csv")
+rep <- fread("data/analysis/monthly-rep.csv")
 rep$month <- as.factor(rep$month)
 rep$avgNN <- rep$V1/1000
 

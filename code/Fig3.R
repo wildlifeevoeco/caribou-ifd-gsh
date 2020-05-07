@@ -3,11 +3,10 @@ libs <- c("data.table", "ggplot2",
           "sp","gridExtra", "cowplot")
 lapply(libs, require, character.only = TRUE)
 
-#fwrite(yravglocs_ranked, "data/yravglocs_ranked.csv")
-
-yravglocs_ranked <- fread("data/yravglocs_ranked.csv")
-yrvOn <- fread("data/on-calving.csv")
-yrvOff <- fread("data/off-calving.csv")
+## Load data
+yravglocs_ranked <- fread("data/figures/Fig3/yravglocs_ranked.csv")
+yrvOn <- fread("data/figures/Fig3/on-calving.csv")
+yrvOff <- fread("data/figures/Fig3/off-calving.csv")
 
 
 avgOn <- mean(yrvOn$predict.mod1, na.rm = TRUE)
