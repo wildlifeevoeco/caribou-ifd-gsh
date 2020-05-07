@@ -4,40 +4,46 @@ libs <- c('data.table','plyr','ggplot2','adehabitatHR', 'cowplot',
 
 lapply(libs, require, character.only = TRUE)
 
+
 # Read in the data
 #for the broken stick
-yravglocs <- read.csv('data/yravglocs_ranked.csv')
+yravglocs <- read.csv('data/ranks.csv')
 # for the voronoi polygons
 raw_all_NNdist <- read.csv("data/raw_all_NNdist.csv")
 
 #### Broken stick plots ----
 
+yravglocs$valkm <- yravglocs$val/1000
+
+## subset by year
 yravglocs2009 <- yravglocs[yravglocs$Year == "2009",]
 yravglocs2010 <- yravglocs[yravglocs$Year == "2010",]
 yravglocs2011 <- yravglocs[yravglocs$Year == "2011",]
 yravglocs2012 <- yravglocs[yravglocs$Year == "2012",]
 yravglocs2013 <- yravglocs[yravglocs$Year == "2013",]
 
-### 2009
-# x <- yravglocs2009$idrank
-# y <- yravglocs2009$valkm
-# 
-# lin.mod <- lm(y~x)
-# segmented.mod <- segmented(lin.mod, seg.Z = ~x, psi = 14)
-# summary(segmented.mod)
-# 
-# plot(x,y, pch=16)
-# plot(segmented.mod, add=T)
-# 
-# fit <- numeric(length(x)) * NA
-# fit[complete.cases(rowSums(cbind(y, x)))] <- broken.line(segmented.mod)$fit
-# 
-# yravglocs2009$fit <- fit
-# yravglocs2009$breakpoint <- 15.903
-# f <- 15.903
-# predict(segmented.mod, data.frame(x=f))
 
-bstick2009 <-ggplot(yravglocs2009, aes(x = idrank, y = valkm)) + 
+
+### 2009
+x <- yravglocs2009$idrank
+y <- yravglocs2009$valkm
+ 
+lin.mod <- lm(y~x)
+segmented.mod <- segmented(lin.mod, seg.Z = ~x, psi = 14)
+summary(segmented.mod)
+ 
+plot(x,y, pch=16)
+plot(segmented.mod, add=T)
+ 
+fit <- numeric(length(x)) * NA
+fit[complete.cases(rowSums(cbind(y, x)))] <- broken.line(segmented.mod)$fit
+ 
+yravglocs2009$fit <- fit
+yravglocs2009$breakpoint <- 15.903
+f <- 15.903
+predict(segmented.mod, data.frame(x=f))
+
+bstick2009 <- ggplot(yravglocs2009, aes(x = idrank, y = valkm)) + 
   geom_point(aes(color = CalvingGround), size = 0.75) +
   geom_line(aes(x = idrank, y = fit, group = idrank < breakpoint), color = 'black', size = 0.5)+
   ylab("NN dist. (km)")+
@@ -59,23 +65,23 @@ bstick2009 <-ggplot(yravglocs2009, aes(x = idrank, y = valkm)) +
 # yravglocs2009$CalvingGround <- ifelse(yravglocs2009$idrank >= 16, "Off","On")
 
 ### 2010
-# x <- yravglocs2010$idrank
-# y <- yravglocs2010$valkm
-# 
-# lin.mod <- lm(y~x)
-# segmented.mod <- segmented(lin.mod, seg.Z = ~x, psi=c(14))
-# summary(segmented.mod)
-# 
-# plot(x,y, pch=16)
-# plot(segmented.mod, add=T)
-# 
-# fit <- numeric(length(x)) * NA
-# fit[complete.cases(rowSums(cbind(y, x)))] <- broken.line(segmented.mod, link = F)$fit
-# 
-# yravglocs2010$fit <- fit
-# yravglocs2010$breakpoint <- 19.553
-# f <- 19.553
-# predict(segmented.mod, data.frame(x=f))
+ x <- yravglocs2010$idrank
+ y <- yravglocs2010$valkm
+ 
+ lin.mod <- lm(y~x)
+ segmented.mod <- segmented(lin.mod, seg.Z = ~x, psi=c(14))
+ summary(segmented.mod)
+ 
+ plot(x,y, pch=16)
+ plot(segmented.mod, add=T)
+ 
+ fit <- numeric(length(x)) * NA
+ fit[complete.cases(rowSums(cbind(y, x)))] <- broken.line(segmented.mod, link = F)$fit
+ 
+ yravglocs2010$fit <- fit
+ yravglocs2010$breakpoint <- 19.553
+ f <- 19.553
+ predict(segmented.mod, data.frame(x=f))
 
 bstick2010 <-ggplot(yravglocs2010, aes(x = idrank, y = valkm)) + 
   geom_point(aes(color = CalvingGround), size = 0.75) +
@@ -98,23 +104,23 @@ bstick2010 <-ggplot(yravglocs2010, aes(x = idrank, y = valkm)) +
 # yravglocs2010$CalvingGround <- ifelse(yravglocs2010$idrank >= 20, "Off","On")
 
 ### 2011
-# x <- yravglocs2011$idrank
-# y <- yravglocs2011$valkm
-# 
-# lin.mod <- lm(y~x)
-# segmented.mod <- segmented(lin.mod, seg.Z = ~x, psi=c(14))
-# summary(segmented.mod)
-# 
-# plot(x,y, pch=16)
-# plot(segmented.mod, add=T)
-# 
-# fit <- numeric(length(x)) * NA
-# fit[complete.cases(rowSums(cbind(y, x)))] <- broken.line(segmented.mod, link = F)$fit
-# 
-# yravglocs2011$fit <- fit
-# yravglocs2011$breakpoint <- 21.633
-# f <- 21.633
-# predict(segmented.mod, data.frame(x=f))
+ x <- yravglocs2011$idrank
+ y <- yravglocs2011$valkm
+ 
+ lin.mod <- lm(y~x)
+ segmented.mod <- segmented(lin.mod, seg.Z = ~x, psi=c(14))
+ summary(segmented.mod)
+ 
+ plot(x,y, pch=16)
+ plot(segmented.mod, add=T)
+ 
+ fit <- numeric(length(x)) * NA
+ fit[complete.cases(rowSums(cbind(y, x)))] <- broken.line(segmented.mod, link = F)$fit
+ 
+ yravglocs2011$fit <- fit
+ yravglocs2011$breakpoint <- 21.633
+ f <- 21.633
+ predict(segmented.mod, data.frame(x=f))
 
 bstick2011 <-ggplot(yravglocs2011, aes(x = idrank, y = valkm)) + 
   geom_point(aes(color = CalvingGround), size = 0.75) +
@@ -137,23 +143,23 @@ bstick2011 <-ggplot(yravglocs2011, aes(x = idrank, y = valkm)) +
 # yravglocs2011$CalvingGround <- ifelse(yravglocs2011$idrank >= 22, "Off","On")
 
 ### 2012
-# x <- yravglocs2012$idrank
-# y <- yravglocs2012$valkm
-# 
-# lin.mod <- lm(y~x)
-# segmented.mod <- segmented(lin.mod, seg.Z = ~x, psi=c(14))
-# summary(segmented.mod)
-# 
-# plot(x,y, pch=16)
-# plot(segmented.mod, add=T)
-# 
-# fit <- numeric(length(x)) * NA
-# fit[complete.cases(rowSums(cbind(y, x)))] <- broken.line(segmented.mod, link = F)$fit
-# 
-# yravglocs2012$fit <- fit
-# yravglocs2012$breakpoint <- 16.503
-# f <- 16.503
-# predict(segmented.mod, data.frame(x=f))
+ x <- yravglocs2012$idrank
+ y <- yravglocs2012$valkm
+ 
+ lin.mod <- lm(y~x)
+ segmented.mod <- segmented(lin.mod, seg.Z = ~x, psi=c(14))
+ summary(segmented.mod)
+ 
+ plot(x,y, pch=16)
+ plot(segmented.mod, add=T)
+ 
+ fit <- numeric(length(x)) * NA
+ fit[complete.cases(rowSums(cbind(y, x)))] <- broken.line(segmented.mod, link = F)$fit
+ 
+ yravglocs2012$fit <- fit
+ yravglocs2012$breakpoint <- 16.503
+ f <- 16.503
+ predict(segmented.mod, data.frame(x=f))
 
 bstick2012 <-ggplot(yravglocs2012, aes(x = idrank, y = valkm)) + 
   geom_point(aes(color = CalvingGround), size = 0.75) +
@@ -177,25 +183,25 @@ bstick2012 <-ggplot(yravglocs2012, aes(x = idrank, y = valkm)) +
 # yravglocs2012$CalvingGround <- ifelse(yravglocs2012$idrank >= 17, "Off","On")
 
 ### 2013
-# x <- yravglocs2013$idrank
-# y <- yravglocs2013$valkm
-# 
-# lin.mod <- lm(y~x)
-# segmented.mod <- segmented(lin.mod, seg.Z = ~x, psi=c(10))
-# summary(segmented.mod)
-# 
-# plot(x,y, pch=16)
-# plot(segmented.mod, add=T)
-# 
-# fit <- numeric(length(x)) * NA
-# fit[complete.cases(rowSums(cbind(y, x)))] <- broken.line(segmented.mod, link = F)$fit
-# 
-# yravglocs2013$fit <- fit
-# yravglocs2013$breakpoint <- 10.328
-# f <- 10.328
-# predict(segmented.mod, data.frame(x=f))
+ x <- yravglocs2013$idrank
+ y <- yravglocs2013$valkm
+ 
+ lin.mod <- lm(y~x)
+ segmented.mod <- segmented(lin.mod, seg.Z = ~x, psi=c(10))
+ summary(segmented.mod)
+ 
+ plot(x,y, pch=16)
+ plot(segmented.mod, add=T)
+ 
+ fit <- numeric(length(x)) * NA
+ fit[complete.cases(rowSums(cbind(y, x)))] <- broken.line(segmented.mod, link = F)$fit
+ 
+ yravglocs2013$fit <- fit
+ yravglocs2013$breakpoint <- 10.328
+ f <- 10.328
+ predict(segmented.mod, data.frame(x=f))
 
-bstick2013 <-ggplot(yravglocs2013, aes(x = idrank, y = valkm)) + 
+bstick2013 <-ggplot(yravglocs2013, aes(x = idrank, y = val/1000)) + 
   geom_point(aes(color = CalvingGround), size =0.75) +
   geom_line(aes(x = idrank, y = fit, group = idrank < breakpoint), color = 'black', size = 0.5)+
   ylab("NN dist. (km)") +
@@ -312,8 +318,6 @@ vor2012 <- ls.plots.voronoi[[4]]
 vor2013 <- ls.plots.voronoi[[5]]
 
 #Make insets custom annotations 
-### QUINN: I think here is maybe where the problem might be with the insets. 
-#Something within the ggplotGrob (which is part of ggtable) function might be able to fix it
 inset2009 <- bstick2009 + annotation_custom(ggplotGrob(vor2009), 
                                             xmin = -6, xmax = 14, ymin=30, ymax=68)
 
