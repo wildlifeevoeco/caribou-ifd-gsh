@@ -1,5 +1,3 @@
-
-
 ### Packages ----
 libs <- c('data.table', 'ggplot2', 'rgdal', 'lubridate')
 lapply(libs, require, character.only = TRUE)
@@ -20,25 +18,25 @@ utm21N <- '+proj=utm +zone=21 ellps=WGS84'
 
 ### Input raw data ----
 DT <- fread('../CaribouSEE/input/AllCaribouDataRaw.csv',
-            drop = c("SPECIES", "EPSG_CODE", "Map_Quality",
-                     "COLLAR_FILE_ID", "EXCLUDE", "VENDOR_CL", "DOP",
-                     "NAV", "VALIDATED", "LOCQUAL", "COLLAR_ID",
-                     "AGE", "Fix_Time_Delta", "V1", "FIX_ID"))
+            drop = c('SPECIES', 'EPSG_CODE', 'Map_Quality',
+                     'COLLAR_FILE_ID', 'EXCLUDE', 'VENDOR_CL', 'DOP',
+                     'NAV', 'VALIDATED', 'LOCQUAL', 'COLLAR_ID',
+                     'AGE', 'Fix_Time_Delta', 'V1', 'FIX_ID'))
 
 
 ### Preprocessing ----
 DT[, datetime := ymd_hms(paste(FIX_DATE, FIX_TIME))]
-DT[, roundtime := round_date(datetime, unit = "hours")]
+DT[, roundtime := round_date(datetime, unit = 'hours')]
 
 DT[, Year := year(datetime)]
 DT[, JDate := yday(datetime)]
 
-DT[JDate >= 141 & JDate <= 212, season := "calving"]
+DT[JDate >= 141 & JDate <= 212, season := 'calving']
 
 DT <- DT[!(is.na(season))]
 
-DT <- DT[SEX == "F" & COLLAR_TYPE_CL == "GPS" & Year >= "2009" &
-           HERD == "MIDRIDGE"]
+DT <- DT[SEX == 'F' & COLLAR_TYPE_CL == 'GPS' & Year >= '2009' &
+           HERD == 'MIDRIDGE']
 
 ## Loc fields
 DT[, c('EASTING', 'NORTHING') := as.data.table(project(cbind(X_COORD, Y_COORD), utm21N))]
@@ -82,10 +80,11 @@ DT[, moveRate := simpleStep / (get(dif.time.col))]
 DT <- DT[moveRate < 50000]
 
 ## add IDYr
-DT$IDYr <- as.factor(paste(DT$ANIMAL_ID, DT$Year, sep = "_"))
+DT[, IDYr := as.factor(paste(ANIMAL_ID, Year, sep = '_'))]
 
 ## Export data
-saveRDS(DT[,c("ANIMAL_ID", "IDYr", "datetime", "roundtime","Year", 
-             "JDate", "EASTING", "NORTHING")], 'output/caribou-all.Rds')
+saveRDS(DT[, .(ANIMAL_ID, IDYr, datetime, roundtime, Year, 
+               JDate, EASTING, NORTHING)], 
+        'output/caribou-all.Rds')
 
 message('=== PREP COMPLETE ===')
