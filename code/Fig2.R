@@ -9,7 +9,7 @@ lapply(libs, require, character.only = TRUE)
 #for the broken stick
 yravglocs <- read.csv('data/figures/Fig2/ranks.csv')
 # for the voronoi polygons
-raw_all_NNdist <- read.csv("data/figures/Fig2/raw_all_NNdist.csv")
+raw_all_NNdist <- read.csv("data/locs/raw_all_NNdist.csv")
 
 #### Broken stick plots ----
 
