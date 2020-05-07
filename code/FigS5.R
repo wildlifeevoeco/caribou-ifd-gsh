@@ -6,7 +6,7 @@ lapply(libs, require, character.only = TRUE)
 
 
 ## load data
-DT <- readRDS("output/locs/caribou-all.RDS")
+DT <- readRDS("data/locs/caribou-all.RDS")
 
 ## calculate group_times
 DT <- group_times(DT, datetime = 'datetime', threshold = '5 minutes')
@@ -32,21 +32,7 @@ distNN <- distNN[!is.na(distNN$distance)]
 distNNSum <- distNN[, mean(distance), by = c("ID")]
 colnames(distNNSum) <- c("IDYr","NN")
 
-
-distALL <- merge(distGlobSum, distNNSum, by = "ID")
-
-ggplot(distALL, aes(NNglob, NN)) +
-  geom_point() +
-  geom_smooth()  +
-  xlim(0, 100000) +
-  ylim(0, 100000)
-
-DT2 <- merge(DT, distNNSum, by = "IDYr")
-DT2[NN >= 17000, agg := "off"]
-DT2[NN < 17000, agg := "on"]
-
-
-png("graphics/HistNNdist.png", height = 3000, width = 6000, res = 600, units = "px")
+png("graphics/FigS5.png", height = 3000, width = 6000, res = 600, units = "px")
 aa <-ggplot(distNN) +
   geom_histogram(aes(distance/1000, fill = factor(Year))) +
   ylab("Count") +
