@@ -86,6 +86,6 @@ DT$IDYr <- as.factor(paste(DT$ANIMAL_ID, DT$Year, sep = "_"))
 
 ## Export data
 saveRDS(DT[,c("ANIMAL_ID", "IDYr", "datetime", "roundtime","Year", 
-             "JDate", "EASTING", "NORTHING")], 'output/1-caribou-all.Rds')
+             "JDate", "EASTING", "NORTHING")], 'output/caribou-all.Rds')
 
 message('=== PREP COMPLETE ===')

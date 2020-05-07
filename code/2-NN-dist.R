@@ -46,10 +46,6 @@ DT2[NN >= 17000, agg := "off"]
 DT2[NN < 17000, agg := "on"]
 
 
-ggplot(DT2) +
-  geom_point(aes(EASTING, NORTHING, color = agg), alpha = 0.25) +
-  facet_wrap(~Year)
-
 png("graphics/HistNNdist.png", height = 3000, width = 6000, res = 600, units = "px")
 aa <-ggplot(distNN) +
   geom_histogram(aes(distance/1000, fill = factor(Year))) +
