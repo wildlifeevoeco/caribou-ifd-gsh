@@ -15,20 +15,19 @@ avg_season$CalvingGround2[avg_season$CalvingGround == "Off"] <- 1
 avg_season$CalvingGround2 <- as.integer(avg_season$CalvingGround2)
 
 
-##repeatability in NNdistkm from year to year 
+## repeatability in NN distance (inter-annual) -- Results in Table S3
 mod1<-rpt(NNdistkm ~ Year + (1|ID), data = avg_season, grname = c("ID"))
 summary(mod1)
-plot(mod1)
 
+
+## transform data to generate rank
 datanew<-transform(avg_season, 
                    year.rank = ave(NNdistkm, Year, 
                                    FUN = function(x) rank(-x, ties.method = "first")))
-datanew[datanew$Year==2009,]
 
-##repeatability of rank from year to year 
+##repeatability of NN rank (inter-annual) -- Results in Table S3
 modrank<-rpt(year.rank~Year + (1|ID), data = datanew, grname = c("ID"))
 summary(modrank)
-plot(modrank)
 
 
 ## repeatability in calving ground (on/off)
@@ -36,7 +35,6 @@ plot(modrank)
 modon.off<-rpt(CalvingGround2 ~ (1|ID), data = avg_season, datatype = "Binary", 
                grname = c("ID"))
 summary(modon.off)
-plot(modon.off)
 
 ##repeatability in core/periphery 
 avg_season$CoreThresh<- with(avg_season, NNdistkm - 17.5512)
