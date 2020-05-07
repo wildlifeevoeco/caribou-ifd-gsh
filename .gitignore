@@ -1,7 +1,7 @@
 # Directories with large files #
 ################################
-data/
-output/
+data/locs
+
 
 
 # R related files #
